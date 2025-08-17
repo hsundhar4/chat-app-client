@@ -1,40 +1,39 @@
 import React, { useState } from 'react';
 import Chat from './components/Chat';
+import Login from './components/Login';
 
 function App() {
-  const [room, setRoom] = useState('');
   const [username, setUsername] = useState('');
+  const [room, setRoom] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
   const [joined, setJoined] = useState(false);
 
+  const handleLogin = (user) => {
+    setUsername(user);
+    setLoggedIn(true);
+  };
+
   const handleJoin = () => {
-    if (room.trim() && username.trim()) {
+    if (room.trim()) {
       setJoined(true);
     }
   };
 
+  if (!loggedIn) return <Login onLogin={handleLogin} />;
+
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+    <div style={{ padding: '20px' }}>
       {!joined ? (
-        <div>
-          <h1>Welcome to HemaChat 💬</h1>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ marginBottom: '10px', display: 'block' }}
-          />
+        <>
+          <h1>Welcome, {username} 👋</h1>
           <input
             type="text"
             placeholder="Enter room name"
             value={room}
             onChange={(e) => setRoom(e.target.value)}
-            style={{ marginBottom: '10px', display: 'block' }}
           />
-          <button onClick={handleJoin} disabled={!room.trim() || !username.trim()}>
-            Join Chat
-          </button>
-        </div>
+          <button onClick={handleJoin}>Join Chat</button>
+        </>
       ) : (
         <Chat room={room} username={username} />
       )}
