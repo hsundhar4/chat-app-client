@@ -1,32 +1,45 @@
 import React, { useState } from 'react';
-import Register from './components/Register';
-import Login from './components/Login';
 import Chat from './components/Chat';
 
 function App() {
-  const [token, setToken] = useState('');
-  const [username, setUsername] = useState('');
   const [room, setRoom] = useState('');
+  const [username, setUsername] = useState('');
+  const [joined, setJoined] = useState(false);
 
-  if (!token) {
-    return <Login setToken={setToken} setUsername={setUsername} />;
-  }
+  const handleJoin = () => {
+    if (room.trim() && username.trim()) {
+      setJoined(true);
+    }
+  };
 
-  if (!room) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '50px' }}>
-        <h2>Welcome, {username}</h2>
-        <input
-          placeholder="Enter Room Name"
-          value={room}
-          onChange={(e) => setRoom(e.target.value)}
-        />
-        <button onClick={() => setRoom(room)}>Join</button>
-      </div>
-    );
-  }
-
-  return <Chat room={room} username={username} />;
+  return (
+    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+      {!joined ? (
+        <div>
+          <h1>Welcome to HemaChat 💬</h1>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ marginBottom: '10px', display: 'block' }}
+          />
+          <input
+            type="text"
+            placeholder="Enter room name"
+            value={room}
+            onChange={(e) => setRoom(e.target.value)}
+            style={{ marginBottom: '10px', display: 'block' }}
+          />
+          <button onClick={handleJoin} disabled={!room.trim() || !username.trim()}>
+            Join Chat
+          </button>
+        </div>
+      ) : (
+        <Chat room={room} username={username} />
+      )}
+    </div>
+  );
 }
 
 export default App;
